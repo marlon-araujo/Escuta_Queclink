@@ -41,7 +41,7 @@ namespace Escuta_Queclink
         public string Input5 { get; set; }
         public string Input6 { get; set; }
         public string Data_Envio { get; set; }
-        public int Numero_Mensagem { get; set; }
+        public string Numero_Mensagem { get; set; }
         public string Nome_Arquivo { get; set; }
 
         public bool Ignicao { get; set; }

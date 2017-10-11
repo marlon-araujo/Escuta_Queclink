@@ -51,6 +51,68 @@ namespace Escuta_Queclink
             try
             {
                 Console.WriteLine("Conectado !");
+
+                //string mensagem_traduzida = "+RESP:GTFTP,3C0303,3594644038007972,,,A3_20171009192608.jpg,0,0.0,216,475.4,-51.417806,-22.135279,20171009192705,0724,0003,0206,4E2D,00,20171009192746,0E45$";
+                /*string mensagem_traduzida = "+RESP:GTFTP,3C0303,3594644038007972,,0,,20171009192608,0,0.0,216,475.4,-51.417806,-22.135279,20171009192705,0724,0003,0206,4E2D,00,,,,,20171009192708,0E45$";
+                Console.WriteLine("\n" + mensagem_traduzida);
+                var array_mensagem = mensagem_traduzida.Split(',');
+
+                Dados lista = new Dados();
+
+                string[] tipo_mensagem = array_mensagem[0].Split(':');
+                if (tipo_mensagem[0] == "+RESP")
+                {
+                    lista.Tipo_Mensagem = tipo_mensagem[1];
+
+                    if (lista.Tipo_Mensagem == "GTFTP")
+                    {
+                        #region Preenchendo Objeto
+                        if (mensagem_traduzida.Contains(".jpg"))
+                        {
+                            lista.Protocolo = array_mensagem[1];
+                            lista.Imei = array_mensagem[2];
+                            lista.Nome_Rastreador = array_mensagem[3];
+                            lista.Nome_Arquivo = array_mensagem[5];
+
+                            lista.GPS_Precisao = array_mensagem[6];
+                            lista.Velocidade = array_mensagem[7].Split('.')[0];
+                            lista.Direcao = array_mensagem[8];
+
+                            lista.Longitude = array_mensagem[10];
+                            lista.Latitude = array_mensagem[11];
+                            string data_hora = array_mensagem[12];
+                            data_hora = data_hora.Substring(0, 4) + "-" + data_hora.Substring(4, 2) + "-" + data_hora.Substring(6, 2) + " " + data_hora.Substring(8, 2) + ":" + data_hora.Substring(10, 2) + ":" + data_hora.Substring(12, 2);
+                            lista.Data_Rastreador = Convert.ToDateTime(data_hora);
+
+                            lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
+
+                            GravarFoto(lista);
+                        }
+                        else
+                        {
+                            lista.Protocolo = array_mensagem[1];
+                            lista.Imei = array_mensagem[2];
+                            lista.Nome_Rastreador = array_mensagem[3];
+                            lista.Nome_Arquivo = "A3_" + array_mensagem[6] + ".jpg";
+
+                            lista.GPS_Precisao = array_mensagem[7];
+                            lista.Velocidade = array_mensagem[8].Split('.')[0];
+                            lista.Direcao = array_mensagem[9];
+
+                            lista.Longitude = array_mensagem[11];
+                            lista.Latitude = array_mensagem[12];
+                            string data_hora = array_mensagem[13];
+                            data_hora = data_hora.Substring(0, 4) + "-" + data_hora.Substring(4, 2) + "-" + data_hora.Substring(6, 2) + " " + data_hora.Substring(8, 2) + ":" + data_hora.Substring(10, 2) + ":" + data_hora.Substring(12, 2);
+                            lista.Data_Rastreador = Convert.ToDateTime(data_hora);
+
+                            lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
+
+                            GravarFoto(lista);
+                        }
+                        #endregion
+                    }
+                }*/
+
                 socket.Start();
 
                 while (true)
@@ -91,7 +153,7 @@ namespace Escuta_Queclink
                 while (from_raster && (i = stream.Read(bytes, 0, bytes.Length)) != 0)
                 {
                     string mensagem_traduzida = Encoding.UTF8.GetString(bytes, 0, i);
-                    //Console.WriteLine("\n" + mensagem_traduzida);
+                    //Console.WriteLine("\n" + mensagem_traduzida);                    
                     var array_mensagem = mensagem_traduzida.Split(',');
 
                     Dados lista = new Dados();
@@ -99,9 +161,7 @@ namespace Escuta_Queclink
                     string[] tipo_mensagem = array_mensagem[0].Split(':');
                     if (tipo_mensagem[0] == "+RESP")
                     {
-                        lista.Tipo_Mensagem = tipo_mensagem[1];
-
-
+                        lista.Tipo_Mensagem = tipo_mensagem[1];                        
                         //EVENTOS
 
                         //GTSTC - OK
@@ -145,6 +205,8 @@ namespace Escuta_Queclink
                         if (lista.Tipo_Mensagem == "GTFTP")
                         {
                             #region Preenchendo Objeto
+                            if (mensagem_traduzida.Contains(".jpg"))
+                            {
                                 lista.Protocolo = array_mensagem[1];
                                 lista.Imei = array_mensagem[2];
                                 lista.Nome_Rastreador = array_mensagem[3];
@@ -154,17 +216,42 @@ namespace Escuta_Queclink
                                 lista.Velocidade = array_mensagem[7].Split('.')[0];
                                 lista.Direcao = array_mensagem[8];
 
-                                lista.Longitude = array_mensagem[9];
+                                /*lista.Longitude = array_mensagem[9];
                                 lista.Latitude = array_mensagem[10];
-                                string data_hora = array_mensagem[11];
+                                string data_hora = array_mensagem[11];*/
+                                lista.Longitude = array_mensagem[10];
+                                lista.Latitude = array_mensagem[11];
+                                string data_hora = array_mensagem[12];
+
                                 data_hora = data_hora.Substring(0, 4) + "-" + data_hora.Substring(4, 2) + "-" + data_hora.Substring(6, 2) + " " + data_hora.Substring(8, 2) + ":" + data_hora.Substring(10, 2) + ":" + data_hora.Substring(12, 2);
                                 lista.Data_Rastreador = Convert.ToDateTime(data_hora);
-
 
                                 lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
 
                                 GravarFoto(lista);
-                                #endregion
+                            }
+                            else
+                            {
+                                lista.Protocolo = array_mensagem[1];
+                                lista.Imei = array_mensagem[2];
+                                lista.Nome_Rastreador = array_mensagem[3];
+                                lista.Nome_Arquivo = "A3_" + array_mensagem[6] + ".jpg";
+
+                                lista.GPS_Precisao = array_mensagem[7];
+                                lista.Velocidade = array_mensagem[8].Split('.')[0];
+                                lista.Direcao = array_mensagem[9];
+
+                                lista.Longitude = array_mensagem[11];
+                                lista.Latitude = array_mensagem[12];
+                                string data_hora = array_mensagem[13];
+                                data_hora = data_hora.Substring(0, 4) + "-" + data_hora.Substring(4, 2) + "-" + data_hora.Substring(6, 2) + " " + data_hora.Substring(8, 2) + ":" + data_hora.Substring(10, 2) + ":" + data_hora.Substring(12, 2);
+                                lista.Data_Rastreador = Convert.ToDateTime(data_hora);
+
+                                lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
+
+                                GravarFoto(lista);
+                            }
+                            #endregion
                         }
                         #endregion
 
@@ -209,7 +296,8 @@ namespace Escuta_Queclink
                             lista.Hodometro = array_mensagem[19]; //Mileage
 
                             lista.Data_Envio = array_mensagem[20];
-                            lista.Numero_Mensagem = int.Parse(array_mensagem[21], System.Globalization.NumberStyles.HexNumber);
+                            //lista.Numero_Mensagem = int.Parse(array_mensagem[21], System.Globalization.NumberStyles.HexNumber);
+                            lista.Numero_Mensagem = array_mensagem[21];
 
 
                             string mensagem = "QCK75GV;" +
@@ -231,6 +319,7 @@ namespace Escuta_Queclink
                         if (lista.Tipo_Mensagem == "GTFRI")
                         {
                             #region Preenchendo Objeto
+
                             lista.Protocolo = array_mensagem[1];
                             lista.Imei = array_mensagem[2];
                             lista.Nome_Rastreador = array_mensagem[3];
@@ -270,7 +359,8 @@ namespace Escuta_Queclink
                             lista.Input6 = array_mensagem[27];
 
                             lista.Data_Envio = array_mensagem[28];
-                            lista.Numero_Mensagem = int.Parse(array_mensagem[29], System.Globalization.NumberStyles.HexNumber);
+                            //lista.Numero_Mensagem = int.Parse(array_mensagem[29], System.Globalization.NumberStyles.HexNumber);
+                            lista.Numero_Mensagem = array_mensagem[29];
 
 
                             lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
@@ -290,7 +380,7 @@ namespace Escuta_Queclink
                                                 lista.Direcao + ";" +
                                                 lista.Numero_Mensagem;
 
-                            Console.WriteLine(mensagem);
+                            Console.WriteLine("\n" + mensagem);
 
                             Gravar(lista, mensagem);
                             #endregion
@@ -324,7 +414,8 @@ namespace Escuta_Queclink
                             lista.Input1 = array_mensagem[18];
                             lista.Hodometro = array_mensagem[19]; //Mileage
                             lista.Data_Envio = array_mensagem[20];
-                            lista.Numero_Mensagem = int.Parse(array_mensagem[21], System.Globalization.NumberStyles.HexNumber);
+                            //lista.Numero_Mensagem = int.Parse(array_mensagem[21], System.Globalization.NumberStyles.HexNumber);
+                            lista.Numero_Mensagem = array_mensagem[21];
 
 
                             lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
@@ -372,7 +463,8 @@ namespace Escuta_Queclink
 
                             lista.Input1 = array_mensagem[16];
                             lista.Data_Envio = array_mensagem[17];
-                            lista.Numero_Mensagem = int.Parse(array_mensagem[18], System.Globalization.NumberStyles.HexNumber);
+                            //lista.Numero_Mensagem = int.Parse(array_mensagem[18], System.Globalization.NumberStyles.HexNumber);
+                            lista.Numero_Mensagem = array_mensagem[18];
 
 
                             lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
@@ -432,8 +524,8 @@ namespace Escuta_Queclink
                             lista.Input5 = array_mensagem[24];
 
                             lista.Data_Envio = array_mensagem[25];
-                            lista.Numero_Mensagem = int.Parse(array_mensagem[26], System.Globalization.NumberStyles.HexNumber);
-
+                            //lista.Numero_Mensagem = int.Parse(array_mensagem[26], System.Globalization.NumberStyles.HexNumber);
+                            lista.Numero_Mensagem = array_mensagem[26];
 
                             lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
 
@@ -485,7 +577,8 @@ namespace Escuta_Queclink
                             lista.Input1 = array_mensagem[21];
                             lista.Hodometro = array_mensagem[22]; //Mileage
                             lista.Data_Envio = array_mensagem[23];
-                            lista.Numero_Mensagem = int.Parse(array_mensagem[24], System.Globalization.NumberStyles.HexNumber);
+                            //lista.Numero_Mensagem = int.Parse(array_mensagem[24], System.Globalization.NumberStyles.HexNumber);
+                            lista.Numero_Mensagem = array_mensagem[24];
 
 
                             lista.Ignicao = Convert.ToInt32(lista.Velocidade) > 0;
@@ -746,8 +839,9 @@ namespace Escuta_Queclink
 
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine("\n" + e.Message.ToString());
                 client.Close();
             }
             client.Close();
@@ -844,14 +938,13 @@ namespace Escuta_Queclink
                 #region Gravar
                 if (r.Gravar())
                 {
-
-                    string mensagem = "QCK75GV;FOTO_SALVA;" +
+                    string mensagem = "QCK75GV;GTFTP;IMG:" + r.nome_img + ";" +
                                         objeto.Imei + ";" +
                                         objeto.Data_Rastreador.ToString("yyyyMMdd;HH:mm:ss") + ";" +
                                         objeto.Latitude + ";" +
                                         objeto.Longitude + ";";
 
-                    Console.WriteLine(mensagem);
+                    Console.WriteLine("\n" + mensagem);
                 }
                 #endregion
             }
